@@ -75,6 +75,7 @@ export function createDemoSeed(): AppData {
       expiresAt: null,
       url: 'https://www.chase.com',
       regionNotes: 'Select markets / online codes vary',
+      termsNotes: '',
       effortScore: 3,
       requirements: [
         {
@@ -108,6 +109,7 @@ export function createDemoSeed(): AppData {
       expiresAt: null,
       url: 'https://www.ally.com',
       regionNotes: 'National online',
+      termsNotes: '',
       effortScore: 2,
       requirements: [
         {
@@ -147,6 +149,7 @@ export function createDemoSeed(): AppData {
       expiresAt: null,
       url: 'https://www.capitalone.com',
       regionNotes: '',
+      termsNotes: '',
       effortScore: 3,
       requirements: [
         {
@@ -186,7 +189,9 @@ export function createDemoSeed(): AppData {
       capitalRequired: 20000,
       expiresAt: '2026-09-30',
       url: 'https://us.etrade.com',
-      regionNotes: 'Open by Sep 2026; fund $20k within 30 days; maintain 45 days',
+      regionNotes: '',
+      termsNotes:
+        'Deposit at least $20,000 of qualifying new money within the first 30 days of account opening. Maintain your balance for 45 additional days after the 30-day funding period ends.',
       effortScore: 2,
       requirements: [
         {
@@ -417,6 +422,7 @@ export function createDemoSeed(): AppData {
     payNetAmount: 1200,
     payFrequency: 'biweekly',
     nextPayday: iso(addDays(now, 7)),
+    liquidCapital: 45000,
   }
 
   return data

@@ -47,16 +47,16 @@ export function TodayPage() {
             <li className="flex gap-3">
               <span className="cc-caption shrink-0 tabular-nums text-cc-accent-ink">1</span>
               <span>
-                <span className="font-semibold text-cc-ink">Add the bank</span>, then save the
-                offer on Watch with bonus amount, capital, expiry, and each requirement step
-                (fund, DD, spend, or balance hold).
+                <span className="font-semibold text-cc-ink">Add the bank</span>, then on Watch pick
+                a Savings or Checking pattern — a few money and day fields, plus terms notes for
+                quirks.
               </span>
             </li>
             <li className="flex gap-3">
               <span className="cc-caption shrink-0 tabular-nums text-cc-accent-ink">2</span>
               <span>
-                <span className="font-semibold text-cc-ink">Set windows</span> — “within X days of
-                open” for the action, and “after prior step” for holds that start once you fund.
+                <span className="font-semibold text-cc-ink">Save the deal</span> with bonus, capital,
+                and expiry. We turn the pattern into fund/hold or DD/spend steps automatically.
               </span>
             </li>
             <li className="flex gap-3">

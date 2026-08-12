@@ -10,7 +10,7 @@ export { ThemeSync } from './ThemeSync'
 export { ThemeSegmented } from './ThemeSegmented'
 export { ThemeQuickToggle } from './ThemeQuickToggle'
 export { BankSearchField } from './BankSearchField'
-export type { BankDraft } from './BankSearchField'
+export type { BankDraft, BankAddResult } from './BankSearchField'
 export { PageReveal, Stagger, StaggerItem, RevealText } from './motion'
 export { AnimatedNumber, AnimatedMoney } from './AnimatedNumber'
 export {

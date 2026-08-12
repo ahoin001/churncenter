@@ -58,6 +58,34 @@ const migrations: Record<number, Migration> = {
       schemaVersion: 3,
     },
   }),
+  /** v3 → v4: offer termsNotes for freeform deal quirks */
+  3: (data) => {
+    const offers = Array.isArray(data.offers)
+      ? data.offers.map((raw) => {
+          if (!isRecord(raw)) return raw
+          return {
+            ...raw,
+            termsNotes: typeof raw.termsNotes === 'string' ? raw.termsNotes : '',
+          }
+        })
+      : []
+    return {
+      ...data,
+      offers,
+      meta: {
+        ...(isRecord(data.meta) ? data.meta : {}),
+        schemaVersion: 4,
+      },
+    }
+  },
+  /** v4 → v5: liquid capital for affordability nudges */
+  4: (data) => ({
+    ...data,
+    meta: {
+      ...(isRecord(data.meta) ? data.meta : {}),
+      schemaVersion: 5,
+    },
+  }),
 }
 
 export function migrate(raw: Record<string, unknown>): AppData {
@@ -105,6 +133,9 @@ export function migrate(raw: Record<string, unknown>): AppData {
       nextPayday: normalizeNextPayday(
         isRecord(cursor.preferences) ? cursor.preferences.nextPayday : undefined,
       ),
+      liquidCapital: normalizeLiquidCapital(
+        isRecord(cursor.preferences) ? cursor.preferences.liquidCapital : undefined,
+      ),
     },
     institutions: Array.isArray(cursor.institutions) ? cursor.institutions : [],
     relationships: Array.isArray(cursor.relationships) ? cursor.relationships : [],
@@ -140,6 +171,11 @@ function normalizeClawbackDays(value: unknown): number {
 }
 
 function normalizePayNetAmount(value: unknown): number {
+  if (typeof value === 'number' && Number.isFinite(value) && value >= 0) return value
+  return 0
+}
+
+function normalizeLiquidCapital(value: unknown): number {
   if (typeof value === 'number' && Number.isFinite(value) && value >= 0) return value
   return 0
 }
@@ -186,6 +222,7 @@ function normalizeOfferRecord(raw: unknown) {
     ...raw,
     expiresAt:
       typeof raw.expiresAt === 'string' || raw.expiresAt === null ? raw.expiresAt : null,
+    termsNotes: typeof raw.termsNotes === 'string' ? raw.termsNotes : '',
     requirements: Array.isArray(raw.requirements)
       ? raw.requirements.map((bp) => normalizeBlueprint(bp))
       : [],

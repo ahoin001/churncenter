@@ -11,6 +11,11 @@ import {
 } from '@/components'
 import { useChurnStore } from '@/data/store'
 import type { ThemeMode } from '@/lib/theme'
+import {
+  buildTransferUrl,
+  encodeTransferPayload,
+  formatTransferSize,
+} from '@/data/transfer'
 
 export function SettingsPage() {
   const data = useChurnStore()
@@ -44,11 +49,29 @@ export function SettingsPage() {
           <Surface className="space-y-4" padding="lg">
             <h2 className="cc-title">Preferences</h2>
             <p className="cc-caption">
-              Pay schedule and DD feasibility live on{' '}
+              Pay schedule lives on{' '}
               <Link className="font-semibold text-cc-accent-ink" to="/profile">
                 Profile
               </Link>
-              .
+              . Liquid cash below helps Watch soft-check savings offers.
+            </p>
+            <TextField
+              label="Cash available to park ($)"
+              type="number"
+              min={0}
+              step={100}
+              value={data.preferences.liquidCapital || ''}
+              placeholder="50000"
+              onChange={(e) =>
+                data.setPreference(
+                  'liquidCapital',
+                  Math.max(0, Number(e.target.value) || 0),
+                )
+              }
+            />
+            <p className="cc-caption">
+              Total liquid money you could put into bonuses. We subtract capital already locked
+              in active chases and nudge (never block) when a new offer needs more.
             </p>
             <TextField
               label="Default cooldown (months)"
@@ -79,11 +102,44 @@ export function SettingsPage() {
 
         <StaggerItem>
           <Surface className="space-y-4" padding="lg">
-            <h2 className="cc-title">Backup</h2>
+            <h2 className="cc-title">Move to another device</h2>
             <p className="cc-body text-cc-ink-secondary">
-              Export JSON before clearing browsers. Import restores a previous ledger.
+              No account. Copy a transfer link for a typical ledger, or use a JSON file when the
+              link would be too large (attachments, long notes). Opening a link asks before
+              replacing data on the other device.
             </p>
             <div className="flex flex-wrap gap-3">
+              <Button
+                variant="secondary"
+                onClick={async () => {
+                  setMessage(null)
+                  const json = data.exportJson()
+                  const encoded = await encodeTransferPayload(json)
+                  if (!encoded.ok) {
+                    if (encoded.reason === 'too_large') {
+                      setMessage(
+                        `Ledger too large for a link (${formatTransferSize(encoded.charLength ?? 0)}). Export JSON instead.`,
+                      )
+                      return
+                    }
+                    setMessage(encoded.detail ?? 'Could not build transfer link.')
+                    return
+                  }
+                  const base = import.meta.env.BASE_URL || '/'
+                  const url = buildTransferUrl(window.location.origin, base, encoded.envelope)
+                  try {
+                    await navigator.clipboard.writeText(url)
+                    setMessage(
+                      `Transfer link copied (${formatTransferSize(encoded.charLength)}${encoded.compressed ? ', compressed' : ''}). Open it on the other device.`,
+                    )
+                  } catch {
+                    setMessage('Clipboard blocked — export JSON instead, or copy from the address bar after pasting manually.')
+                    window.prompt('Copy this transfer link:', url)
+                  }
+                }}
+              >
+                Copy transfer link
+              </Button>
               <Button
                 variant="secondary"
                 onClick={() => {

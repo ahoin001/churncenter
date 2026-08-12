@@ -222,6 +222,7 @@ export const useChurnStore = create<Store>((set, get) => ({
     const next: Offer = {
       ...input,
       expiresAt: input.expiresAt ?? null,
+      termsNotes: input.termsNotes ?? '',
       accountConditions: input.accountConditions
         ? { ...input.accountConditions }
         : createDefaultAccountConditions(),
@@ -278,6 +279,7 @@ export const useChurnStore = create<Store>((set, get) => ({
         }
         return bits.join(' · ')
       }),
+      offer.termsNotes?.trim() || null,
       offer.expiresAt ? `Offer expires ${offer.expiresAt}` : null,
     ]
       .filter(Boolean)

@@ -1,6 +1,6 @@
 /** Domain schema SSOT — versioned with data migrations. */
 
-export const SCHEMA_VERSION = 3
+export const SCHEMA_VERSION = 5
 
 export type EnrollmentStatus =
   | 'researching'
@@ -121,6 +121,8 @@ export type Offer = {
   expiresAt: string | null
   url: string
   regionNotes: string
+  /** Pasted / freeform offer terms (quirks, new-money rules, etc.) */
+  termsNotes: string
   effortScore: number
   requirements: OfferRequirementBlueprint[]
   accountConditions: AccountConditions
@@ -225,6 +227,11 @@ export type Preferences = {
   payFrequency: PayFrequency
   /** Next expected payday (YYYY-MM-DD) */
   nextPayday: string | null
+  /**
+   * Total liquid cash available to park in bonus offers (soft planning number).
+   * 0 means unset — we do not warn about affordability.
+   */
+  liquidCapital: number
 }
 
 export type AppMeta = {
@@ -262,6 +269,7 @@ export function createEmptyAppData(): AppData {
       payNetAmount: 0,
       payFrequency: 'unknown',
       nextPayday: null,
+      liquidCapital: 0,
     },
     institutions: [],
     relationships: [],
