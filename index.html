@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f3f6f5" />
+    <title>ChurnCenter</title>
+    <script>
+      try {
+        var raw = localStorage.getItem('churncenter.app.v1')
+        var mode = 'system'
+        if (raw) {
+          var parsed = JSON.parse(raw)
+          if (parsed && parsed.preferences && parsed.preferences.themeMode) {
+            mode = parsed.preferences.themeMode
+          }
+        }
+        var dark =
+          mode === 'dark' ||
+          (mode === 'system' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+        var meta = document.querySelector('meta[name="theme-color"]')
+        if (meta) meta.setAttribute('content', dark ? '#0e1412' : '#f3f6f5')
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <!--
+      THESIS: Calm money place for bonus lifecycles — not a stressful fintech cockpit.
+      OWN-WORLD: Clearwater — soft mist habitat, solid white surfaces, mint accent, Manrope, physical springs.
+      STORY: See expected cash, do today's one action, track tide gauges to payout, resurface at re-eligibility.
+      FIRST VIEWPORT: Today hero with expected bonus + action queue in one composition.
+      FORM: Companion-feel system + Robinhood/Uber clarity (Clearwater).
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
