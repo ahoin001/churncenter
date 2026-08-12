@@ -140,9 +140,28 @@ export function WatchPage() {
                 ) : null}
                 {offer
                   ? (() => {
-                      const feasibility = assessDdFeasibility(offer, data.preferences)
-                      const suggestion = suggestOpenDate(offer, data.preferences)
-                      if (feasibility.status === 'none') return null
+                      const dd = offer.requirements.find(
+                        (r) =>
+                          r.type === 'direct_deposit' &&
+                          (r.targetAmount ?? 0) > 0 &&
+                          (r.windowDays ?? 0) > 0,
+                      )
+                      if (!dd) return null
+                      const target = dd.targetAmount ?? 0
+                      const windowDays = dd.windowDays ?? 0
+                      const feasibility = assessDdFeasibility(data.preferences, {
+                        type: 'direct_deposit',
+                        targetAmount: target,
+                        currentAmount: 0,
+                        windowDays,
+                        startsAt: null,
+                        deadlineAt: null,
+                      })
+                      const suggestion = suggestOpenDate(
+                        data.preferences,
+                        target,
+                        windowDays,
+                      )
                       return (
                         <DdFeasibilityBanner
                           feasibility={feasibility}
