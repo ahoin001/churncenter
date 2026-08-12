@@ -2,7 +2,7 @@
 
 Calm headquarters for bank checking and savings bonus chasing.
 
-Track deals, requirements, deadlines, clawbacks, and cooldowns without a spreadsheet — local-first on your device (Vite + React + TypeScript). Data lives in `localStorage` with versioned migrations. No Plaid / no backend.
+Track deals, requirements, deadlines, clawbacks, and cooldowns without a spreadsheet — local-first on your device (Vite + React + TypeScript). Data lives in `localStorage` with versioned migrations and **no expiration** (it stays until you reset or clear site data). No Plaid / no backend.
 
 ## Quick start
 

@@ -29,7 +29,8 @@ export function SettingsPage() {
           Settings
         </RevealText>
         <RevealText as="p" className="cc-body mt-2 text-cc-ink-secondary" delay={0.05}>
-          Local-first controls. Your ledger lives on this device.
+          Local-first controls. Your ledger lives on this device with no expiration — it stays
+          until you export, reset, or clear browser site data.
         </RevealText>
       </div>
 

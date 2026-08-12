@@ -6,6 +6,7 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
 }
 
+/** Browser localStorage ledger — no TTL; data lasts until the user clears it. */
 export class LocalStorageRepository implements ChurnRepository {
   load(): AppData {
     try {
@@ -13,6 +14,7 @@ export class LocalStorageRepository implements ChurnRepository {
       if (!raw) return createEmptyAppData()
       const parsed: unknown = JSON.parse(raw)
       if (!isObject(parsed)) return createEmptyAppData()
+      // Never reject or prune based on age — PERSISTENCE_NEVER_EXPIRES in repository.ts.
       return migrate(parsed)
     } catch {
       return createEmptyAppData()
@@ -20,6 +22,7 @@ export class LocalStorageRepository implements ChurnRepository {
   }
 
   save(data: AppData): void {
+    // Domain payload only — do not wrap with expiresAt / maxAge / TTL.
     const payload: AppData = {
       ...data,
       meta: {
